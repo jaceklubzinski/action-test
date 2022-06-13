@@ -21,9 +21,11 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v23
         with:
-          files: */*/Chart.yaml 
+          files: |
+            **/Chart.yaml 
 
       - name: Run step if only the files listed above change
-        if: steps.changed-files-specific.outputs.only_changed == 'true'
+        if: steps.changed-files.outputs.any_changed == 'true'
         run: |
           echo "Only files listed above have changed."
+          git diff --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }}
