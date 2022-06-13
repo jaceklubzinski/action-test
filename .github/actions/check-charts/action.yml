@@ -17,7 +17,6 @@ runs:
     - run: |
         for file in ${{ env.diff_files }}
           do
-            git diff --diff-filter=M --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- $file | grep -E "^[-+]version:"
-            # (( $? )) && echo "$files version has not been changed" && exit 1
+            git diff --diff-filter=M ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- $file | grep -E "^[-+]version:"
           done 
       shell: bash          
