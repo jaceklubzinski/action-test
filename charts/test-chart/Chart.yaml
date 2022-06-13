@@ -6,3 +6,7 @@ sources:
   - https://github.com/PiwikPRO/az-tools
 type: application
 version: 1.0.2
+dependencies:
+- name: grafana
+  repository: https://charts.bitnami.com/bitnami/
+  version: 7.0.03
