@@ -1,0 +1,27 @@
+name: CI2
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # windows-latest | macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: technote-space/get-diff-action@v6
+        with:
+          PATTERNS: |
+            **/Chart.yaml 
+      - name: Check if Chart.yaml was changed
+        if: env.GIT_DIFF && !env.GIT_DIFF_FILTERED
+        run: exit 1
+      - name: Check if Chart.yaml version was changed
+        if: env.GIT_DIFF_FILTERED
+        run: |
+          echo ${{ env.GIT_DIFF_FILTERED }}
+          git diff --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} --  ${{ env.GIT_DIFF_FILTERED }} | grep -E "^[-+]version:"
