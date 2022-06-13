@@ -17,10 +17,10 @@ jobs:
         with:
           PATTERNS: |
             **/Chart.yaml 
-      - name: Check if Chart.yaml was changed
-        if: env.GIT_DIFF && !env.GIT_DIFF_FILTERED
+      - name: Check if the Chart.yaml file has been changed, if not fail
+        if: env.GIT_DIFF_FILTERED == ''
         run: exit 1
-      - name: Check if Chart.yaml version was changed
+      - name: Check if the Chart.yaml version has been changed, if not fail
         if: env.GIT_DIFF_FILTERED
         run: |
           echo ${{ env.GIT_DIFF_FILTERED }}
