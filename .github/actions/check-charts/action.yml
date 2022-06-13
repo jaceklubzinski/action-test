@@ -1,0 +1,22 @@
+name: 'Chart.yaml version verification'
+description: 'Verify Chart.yaml version bump'
+runs:
+  using: "composite"
+  steps:
+    - id: diff
+      run: | 
+        files=$(git diff --diff-filter=M --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- 'charts/*/Chart.yaml')
+        echo "diff_files=$files" >> $GITHUB_ENV
+      shell: bash
+    - run: |
+        if [ -z ${{ env.diff_files }} ]; then
+           echo "Chart.yaml file has not been changed"
+           exit 1
+        fi
+      shell: bash
+    - run: |
+        for file in ${{ steps.diff.files }}
+          do
+            git diff --diff-filter=M --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- $file | grep -E "^[-+]version:"
+          done 
+      shell: bash          
