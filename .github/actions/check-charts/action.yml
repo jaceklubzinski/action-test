@@ -15,8 +15,8 @@ runs:
         fi
       shell: bash
     - run: |
-        for file in ${{ steps.diff.files }}
+        for file in ${{ env.diff_files }}
           do
-            git diff --diff-filter=M --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- $file | grep -E "^[-+]version:"
+            git diff --diff-filter=M ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- $file | grep -E "^[-+]version:"
           done 
       shell: bash          
