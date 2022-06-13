@@ -5,17 +5,18 @@ runs:
   steps:
     - id: diff
       run: | 
-        files=$(git diff --diff-filter=M --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- 'charts/*/Chart.yaml')
-        echo "diff_files=$files" >> $GITHUB_ENV
+        echo 'diff_files<<EOF' >> $GITHUB_ENV
+        git diff --diff-filter=M --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- 'charts/*/Chart.yaml' >> $GITHUB_ENV
+        echo 'EOF' >> $GITHUB_ENV
       shell: bash
     - run: |
-        if [ -z ${{ env.diff_files }} ]; then
+        if [[ "${{ env.diff_files }}" == "" ]]; then
            echo "Chart.yaml file has not been changed"
            exit 1
         fi
       shell: bash
     - run: |
-        for file in ${{ env.diff_files }}
+        for file in "${{ env.diff_files }}"
           do
             git diff --diff-filter=M ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- $file | grep -E "^[-+]version:"
           done 
