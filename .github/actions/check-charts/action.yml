@@ -12,14 +12,7 @@ runs:
         echo 'EOF' >> $GITHUB_ENV
       shell: bash
     - run: |
-        if [[ "${{ env.diff_files }}" == "" ]]; then
-           echo "Chart.yaml file has not been changed"
-           exit 1
-        fi
-      if: env.diff_files
-      shell: bash
-    - run: |
-        for file in "${{ env.diff_files }}"
+        for file in ${{ env.diff_files }}
           do
             git diff --diff-filter=M ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- $file | grep -E "^[-+]version:"
           done 
