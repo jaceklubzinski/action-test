@@ -16,3 +16,5 @@ jobs:
         with:
           fetch-depth: 0
       - uses: ./.github/actions/check-charts
+        with:
+          USER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
