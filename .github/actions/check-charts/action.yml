@@ -15,6 +15,7 @@ runs:
         for file in ${{ env.diff_files }}
           do
             git diff --diff-filter=M ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- $file | grep -E "^[-+]version:"
+            echo "kod odpowiedzi: $?"
           done 
       if: env.diff_files
       shell: bash          
