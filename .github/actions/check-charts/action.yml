@@ -5,8 +5,10 @@ runs:
   steps:
     - id: diff
       run: | 
+        files=$(git diff --diff-filter=ACDMR --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- 'charts/*' ':!*/Chart.yaml' | awk 'BEGIN{FS="/";OFS="/"};{print $1,$2,"Chart.yaml"}' | uniq)
+        echo "files: $files"
         echo 'diff_files<<EOF' >> $GITHUB_ENV
-        git diff --diff-filter=M --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- 'charts/*/Chart.yaml' >> $GITHUB_ENV
+        echo $files >> $GITHUB_ENV
         echo 'EOF' >> $GITHUB_ENV
       shell: bash
     - run: |
@@ -14,10 +16,12 @@ runs:
            echo "Chart.yaml file has not been changed"
            exit 1
         fi
+      if: env.diff_files
       shell: bash
     - run: |
         for file in "${{ env.diff_files }}"
           do
             git diff --diff-filter=M ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- $file | grep -E "^[-+]version:"
           done 
+      if: env.diff_files
       shell: bash          
