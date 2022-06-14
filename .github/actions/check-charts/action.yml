@@ -1,5 +1,8 @@
 name: 'Chart.yaml version verification'
 description: 'Verify Chart.yaml version bump'
+inputs:
+  USER_TOKEN: 
+    required: true
 runs:
   using: "composite"
   steps:
@@ -12,10 +15,12 @@ runs:
         echo 'EOF' >> $GITHUB_ENV
       shell: bash
     - run: |
+        set +e
         for file in ${{ env.diff_files }}
           do
             git diff --diff-filter=M ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- $file | grep -E "^[-+]version:"
-            echo "kod odpowiedzi: $?"
+            (( $? )) && curl -X POST -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ inputs.USER_TOKEN }}" https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments -d "{\"body\":\"Update \`version\` for $file\"}" && exit 1
           done 
+          echo "All versions verified"
       if: env.diff_files
       shell: bash          

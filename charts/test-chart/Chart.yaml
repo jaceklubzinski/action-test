@@ -5,8 +5,8 @@ description: A chart that deploys az-tools application
 sources:
   - https://github.com/PiwikPRO/az-tools
 type: application
-version: 1.0.7
+version: 1.0.8
 dependencies:
 - name: grafana
   repository: https://charts.bitnami.com/bitnami/
-  version: 7.0.6
+  version: 7.0.8
