@@ -21,9 +21,9 @@ jobs:
       - name: PR merged
         run: echo ${{ github.event.pull_request.merged }} 
         shell: bash 
-      - run: echo "Nie działa na merge"
+      - run: echo "Merge false"
         shell: bash
         if: github.event.pull_request.merged == false
-      - run: echo "DZiała na merge"
+      - run: echo "Merge true"
         shell: bash
         if: github.event.pull_request.merged == true
