@@ -4,6 +4,9 @@ on:
   pull_request:
     types:
       - closed
+      - opened
+      - synchronize
+      - reopened
 
 jobs:
   build:
@@ -18,7 +21,7 @@ jobs:
       - name: event action
         run: echo ${{ github.event.action }} 
         shell: bash 
-      - name: PR merged
+      - name: Pull R merged
         run: echo ${{ github.event.pull_request.merged }} 
         shell: bash 
       - run: echo "Merge false"
