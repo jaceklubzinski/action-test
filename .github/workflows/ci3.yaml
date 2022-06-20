@@ -2,6 +2,8 @@ name: CI3
 
 on:
   pull_request:
+    types:
+      - closed
 
 jobs:
   build:
@@ -13,6 +15,12 @@ jobs:
       - uses: ./.github/actions/check-charts
         with:
           USER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: event action
+        run: echo ${{ github.event.action }} 
+        shell: bash 
+      - name: PR merged
+        run: echo ${{ github.event.pull_request.merged }} 
+        shell: bash 
       - run: echo "Nie działa na merge"
         shell: bash
         if: github.event.pull_request.merged == false
