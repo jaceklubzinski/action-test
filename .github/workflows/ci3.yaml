@@ -13,3 +13,9 @@ jobs:
       - uses: ./.github/actions/check-charts
         with:
           USER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: echo "Nie działa na merge"
+        shell: bash
+        if: github.event.pull_request.merged == false
+      - run: echo "DZiała na merge"
+        shell: bash
+        if: github.event.pull_request.merged == true

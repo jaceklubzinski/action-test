@@ -24,13 +24,3 @@ runs:
           echo "All versions verified"
       if: env.diff_files
       shell: bash          
-    - run: echo "Merge: ${{ github.event.pull_request.merged }}"
-      shell: bash
-    - run: echo "Action: ${{ github.event.action }}"
-      shell: bash
-    - run: echo "Nie działa na merge"
-      shell: bash
-      if: github.event.pull_request.merged == false 
-    - run: echo "DZiała na merge"
-      shell: bash
-      if: github.event.pull_request.merged == true
